@@ -1,6 +1,7 @@
 import pygame
 import time
 import random
+import math
 class game:  
     
     def __init__(self):
@@ -15,17 +16,18 @@ class game:
         self.total_thing=5
         self.gameExit = False
         self.thing_list=[]
+        self.bullets_count=100
+        self.sin_run = 0
 
     def init2(self):
         self.x = (self.display_width * 0.45)
         self.y = (self.display_height * 0.8)
         self.x_change = 0
         self.thing_startx = random.randrange(200, self.display_width-self.car_width-500)
-        self.thing_starty = random.randint(-200,-10)
+        self.thing_starty = random.randint(-200,-100)
         self.thing_speed = 0.5
         self.thing_width = 30
         self.thing_height = 30
-        self.bullets_count=100
         self.dodged = 0
         self.bullet_list=[]
         
@@ -46,7 +48,12 @@ class game:
     def thing_creation(self):
         for i in self.thing_list:
             i[1] += self.thing_speed
+            if self.sin_run >= 1000:            #for sine like movement
+                i[0] += math.sin(i[1])*10
             self.thing(i[0],i[1],i[2],i[3],i[4])
+        self.sin_run += 10
+        if self.sin_run >= 1010:
+            self.sin_run = 0
     
     def thing_cross(self):
         for i in self.thing_list:
@@ -54,7 +61,7 @@ class game:
                 i[1] = random.randint(-200,-10)
                 i[0] = random.randrange(0,self.display_width)
                 self.dodged += 1
-                self.thing_speed += 0.1
+                #self.thing_speed += 0.1
                 #i[2] += (self.dodged * 0.12)
             
     def thing_hit(self):
@@ -86,7 +93,6 @@ class game:
                     li[1] = 0 - li[3]
                     li[0] = random.randrange(0,self.display_width)
                     self.dodged += 1
-                    self.thing_speed += 0.1
                     li[2] += (self.dodged * 0.12)
                 else:
                     temp2.append(self.bullet_list[i])
@@ -133,7 +139,7 @@ class game:
             self.init2()
             self.thing_list.append([self.thing_startx,self.thing_starty,self.thing_width,self.thing_height,self.block_color])
             
-        print(len(self.thing_list))
+        #print(len(self.thing_list))
         
         while not self.gameExit:
             for event in pygame.event.get():
@@ -156,6 +162,7 @@ class game:
                 break
             
             self.x += self.x_change
+            
             self.gameDisplay.fill(self.white)
             
             self.thing_creation()#
