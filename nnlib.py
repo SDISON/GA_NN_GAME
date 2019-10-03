@@ -64,7 +64,7 @@ class nn:
     
     
     def __init__(self,nodes, activations,features):
-        np.random.seed(0)
+        # np.random.seed(0)
         self.nodes=nodes
         self.activations=activations    
         self.act_func={'sigmoid':self.sigmoid,'tanh':self.tanh,'relu':self.relu,'leaky_relu':self.leaky_relu,'softmax':self.softmax}
